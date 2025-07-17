@@ -46,24 +46,31 @@
     @keyframes blink {
       50% { border-color: transparent; }
     }
+    .logo {
+      width: 150px;
+      margin: 30px auto 0;
+      display: block;
+    }
   </style>
 </head>
 <body>
   <div id="terminal">
     <div>> <span class="typing" id="type-init"></span></div>
+    <div id="countdown"></div>
   </div>
   <div class="input-line">
     <span>&gt;</span><input type="text" id="terminal-input" autofocus />
   </div>
+  <img src="profile picture.jpg" alt="Logo" class="logo" />
 
   <script>
     const terminal = document.getElementById('terminal');
     const input = document.getElementById('terminal-input');
     const typeInit = document.getElementById('type-init');
+    const countdownEl = document.getElementById('countdown');
 
     let step = -1;
     let userData = {};
-    let typingQueue = [];
 
     function typeText(text, callback) {
       let i = 0;
@@ -112,9 +119,9 @@
         userData.email = command;
         step = 3;
         addLine('Thank you. Registration received.');
-        addLine('You are now registered for the event. You will receive further information via email shortly.');
         addLine(`Name: ${userData.name}`);
         addLine(`Email: ${userData.email}`);
+        addLine('You are now registered for the event. You will receive further information via email shortly.');
         sendToGoogleForms(userData);
       } else {
         addLine('Unrecognized command. Type "register" to start.');
@@ -130,10 +137,34 @@
       }
     });
 
-    // Init typing welcome message
+    function startCountdown() {
+      const eventDate = new Date("2025-08-15T20:00:00"); // Replace with your actual event date/time
+      function updateCountdown() {
+        const now = new Date();
+        const diff = eventDate - now;
+
+        if (diff <= 0) {
+          countdownEl.textContent = '> The event has started!';
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        countdownEl.textContent = `> Event countdown: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
+
     window.onload = () => {
-      typeText("Welcome to the Event Terminal\n> Type \"register\" to begin...");
-      step = 0;
+      typeText("Welcome to the Event Terminal\n> Type \"register\" to begin...", () => {
+        step = 0;
+      });
+      startCountdown();
     };
   </script>
 </body>
