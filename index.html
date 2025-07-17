@@ -10,14 +10,21 @@
       color: #00ff00;
       font-family: 'Courier New', Courier, monospace;
       padding: 20px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100vh;
     }
     #terminal {
-      max-width: 600px;
+      max-width: 100%;
       margin: auto;
       white-space: pre-wrap;
+      word-wrap: break-word;
     }
     .input-line {
       display: flex;
+      margin-top: 10px;
     }
     .input-line span {
       margin-right: 5px;
@@ -31,12 +38,19 @@
       width: 100%;
       outline: none;
     }
+    .typing {
+      display: inline-block;
+      border-right: 2px solid #00ff00;
+      animation: blink 0.7s steps(1) infinite;
+    }
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
   </style>
 </head>
 <body>
   <div id="terminal">
-    <div>> Welcome to the Event Terminal</div>
-    <div>> Type "register" to begin...</div>
+    <div>> <span class="typing" id="type-init"></span></div>
   </div>
   <div class="input-line">
     <span>&gt;</span><input type="text" id="terminal-input" autofocus />
@@ -45,9 +59,23 @@
   <script>
     const terminal = document.getElementById('terminal');
     const input = document.getElementById('terminal-input');
+    const typeInit = document.getElementById('type-init');
 
-    let step = 0;
+    let step = -1;
     let userData = {};
+    let typingQueue = [];
+
+    function typeText(text, callback) {
+      let i = 0;
+      const interval = setInterval(() => {
+        typeInit.textContent += text.charAt(i);
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+          if (callback) callback();
+        }
+      }, 50);
+    }
 
     function addLine(text) {
       const div = document.createElement('div');
@@ -101,6 +129,12 @@
         input.value = '';
       }
     });
+
+    // Init typing welcome message
+    window.onload = () => {
+      typeText("Welcome to the Event Terminal\n> Type \"register\" to begin...");
+      step = 0;
+    };
   </script>
 </body>
 </html>
