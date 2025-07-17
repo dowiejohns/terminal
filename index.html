@@ -88,7 +88,7 @@
     const line1 = document.getElementById('line1');
     const line2 = document.getElementById('line2');
 
-  step = 0;
+    let step = 0;
     let userData = {};
 
     function addLine(text) {
@@ -148,26 +148,22 @@
     const messages = ['Welcome to Baile Da Perifa', 'Type "register" to begin...'];
     const lines = [line1, line2];
     let messageIndex = 0, charIndex = 0;
-   function typeLines(callback) {
-  if (messageIndex < messages.length) {
-    if (charIndex < messages[messageIndex].length) {
-      lines[messageIndex].textContent += messages[messageIndex][charIndex];
-      charIndex++;
-      setTimeout(() => typeLines(callback), 50);
-    } else {
-      messageIndex++;
-      charIndex = 0;
+    function typeLines(callback) {
       if (messageIndex < messages.length) {
-        setTimeout(() => typeLines(callback), 500);
-      } else {
-        if (callback) callback();
+        if (charIndex < messages[messageIndex].length) {
+          lines[messageIndex].textContent += messages[messageIndex][charIndex];
+          charIndex++;
+          setTimeout(() => typeLines(callback), 50);
+        } else {
+          messageIndex++;
+          charIndex = 0;
+          if (messageIndex < messages.length) setTimeout(() => typeLines(callback), 500);
+        }
       }
     }
-  }
-}
-  typeLines(() => {
-  step = 0;
-});
+    typeLines(() => {
+      step = 0;
+    });
 
     // Countdown script
     const countdown = document.getElementById('countdown');
