@@ -56,6 +56,22 @@
       terminal.scrollTop = terminal.scrollHeight;
     }
 
+    function sendToGoogleForms(data) {
+      const formData = new FormData();
+      formData.append("entry.1234567890", data.name); // Replace with actual field ID for name
+      formData.append("entry.0987654321", data.email); // Replace with actual field ID for email
+
+      fetch("https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse", {
+        method: "POST",
+        mode: "no-cors",
+        body: formData
+      }).then(() => {
+        addLine("Submission sent to server.");
+      }).catch(() => {
+        addLine("There was an error submitting your data.");
+      });
+    }
+
     function handleCommand(command) {
       if (step === 0 && command.toLowerCase() === 'register') {
         step = 1;
@@ -70,7 +86,8 @@
         addLine('Thank you. Registration received.');
         addLine(`Name: ${userData.name}`);
         addLine(`Email: ${userData.email}`);
-        // TODO: integrate with form service
+        addLine('You are now registered for the event. You will receive further information via email shortly.');
+        sendToGoogleForms(userData);
       } else {
         addLine('Unrecognized command. Type "register" to start.');
       }
