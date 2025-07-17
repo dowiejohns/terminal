@@ -112,9 +112,9 @@
         userData.email = command;
         step = 3;
         addLine('Thank you. Registration received.');
+        addLine('You are now registered for the event. You will receive further information via email shortly.');
         addLine(`Name: ${userData.name}`);
         addLine(`Email: ${userData.email}`);
-        addLine('You are now registered for the event. You will receive further information via email shortly.');
         sendToGoogleForms(userData);
       } else {
         addLine('Unrecognized command. Type "register" to start.');
