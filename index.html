@@ -108,7 +108,7 @@
         mode: "no-cors",
         body: formData
       }).then(() => {
-        addLine("Submission sent to server.");
+        addLine("Submission sent to administrators.");
       }).catch(() => {
         addLine("There was an error submitting your data.");
       });
@@ -117,7 +117,7 @@
     function handleCommand(command) {
       if (step === 0 && command.toLowerCase() === 'register') {
         step = 1;
-        addLine('Please enter your name:');
+        addLine('Please enter your full name:');
       } else if (step === 1) {
         userData.name = command;
         step = 2;
@@ -145,7 +145,7 @@
     });
 
     // Typing animation
-    const messages = ['Welcome to the Event Terminal', 'Type "register" to begin...'];
+    const messages = ['Welcome to Baile Da Perifa', 'Type "register" to begin...'];
     const lines = [line1, line2];
     let messageIndex = 0, charIndex = 0;
     function typeLines() {
